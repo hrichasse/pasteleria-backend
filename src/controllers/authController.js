@@ -23,7 +23,9 @@ async function register(req, res, next) {
     if (existing) {
       return next({ statusCode: 409, message: 'El email ya está registrado' });
     }
-    const user = await User.create(req.body);
+    // quitar confirmPassword antes de crear documento
+    const { confirmPassword, ...cleanBody } = req.body;
+    const user = await User.create(cleanBody);
     const token = generateToken({ userId: user._id, role: user.role });
     return res.status(201).json(ok('Usuario registrado correctamente', 201, { user, token }));
   } catch (err) {
