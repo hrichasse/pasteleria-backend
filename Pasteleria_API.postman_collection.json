@@ -1,0 +1,197 @@
+{
+  "info": {
+    "name": "Pastelería API",
+    "description": "Colección completa de endpoints para la API de Pastelería",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:3001"
+    },
+    {
+      "key": "TOKEN",
+      "value": ""
+    },
+    {
+      "key": "ADMIN_TOKEN",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{BASE_URL}}/health"
+      }
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Juan Pérez\",\n  \"email\": \"juan@example.com\",\n  \"password\": \"secreto123\",\n  \"phone\": \"987654321\"\n}"
+            },
+            "url": "{{BASE_URL}}/api/auth/register"
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"juan@example.com\",\n  \"password\": \"secreto123\"\n}"
+            },
+            "url": "{{BASE_URL}}/api/auth/login"
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{TOKEN}}"}],
+            "url": "{{BASE_URL}}/api/auth/profile"
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{TOKEN}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"999888777\",\n  \"address\": {\n    \"street\": \"Av. Principal 123\",\n    \"city\": \"Lima\"\n  }\n}"
+            },
+            "url": "{{BASE_URL}}/api/auth/profile"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/products?page=1&limit=10",
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "limit", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{BASE_URL}}/api/products/:id"
+          }
+        },
+        {
+          "name": "Create Product (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{ADMIN_TOKEN}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Torta de Chocolate\",\n  \"description\": \"Deliciosa torta con ganache\",\n  \"price\": 35.50,\n  \"category\": \"tradicional\",\n  \"stock\": 15\n}"
+            },
+            "url": "{{BASE_URL}}/api/products"
+          }
+        },
+        {
+          "name": "Update Product (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{ADMIN_TOKEN}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 38.00,\n  \"stock\": 20\n}"
+            },
+            "url": "{{BASE_URL}}/api/products/:id"
+          }
+        },
+        {
+          "name": "Delete Product (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{"key": "Authorization", "value": "Bearer {{ADMIN_TOKEN}}"}],
+            "url": "{{BASE_URL}}/api/products/:id"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{TOKEN}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"<PRODUCT_ID>\",\n      \"quantity\": 2\n    }\n  ],\n  \"paymentMethod\": \"efectivo\",\n  \"deliveryAddress\": {\n    \"street\": \"Av. Arequipa 2850\",\n    \"city\": \"Lima\",\n    \"state\": \"Lima\",\n    \"zipCode\": \"15047\",\n    \"phone\": \"945123456\"\n  },\n  \"notes\": \"Entregar entre 3-5pm\"\n}"
+            },
+            "url": "{{BASE_URL}}/api/orders"
+          }
+        },
+        {
+          "name": "List Orders",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{TOKEN}}"}],
+            "url": {
+              "raw": "{{BASE_URL}}/api/orders?page=1&limit=10",
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "limit", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Order Status (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{ADMIN_TOKEN}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"confirmed\"\n}"
+            },
+            "url": "{{BASE_URL}}/api/orders/:id/status"
+          }
+        }
+      ]
+    }
+  ]
+}
