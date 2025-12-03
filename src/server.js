@@ -57,15 +57,16 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 // Inicio ------------------------------------------------------------------
-connectDB()
-  .then(() => {
-    app.listen(config.port, () => {
-      console.log(`[Servidor] Escuchando en puerto ${config.port}`);
-    });
-  })
-  .catch((err) => {
-    console.error('[Servidor] No se pudo iniciar:', err.message);
-    process.exit(1);
+// Conectar a MongoDB
+connectDB().catch((err) => {
+  console.error('[Servidor] Error conectando a MongoDB:', err.message);
+});
+
+// Solo iniciar servidor si NO está en Vercel
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(config.port, () => {
+    console.log(`[Servidor] Escuchando en puerto ${config.port}`);
   });
+}
 
 module.exports = app;
