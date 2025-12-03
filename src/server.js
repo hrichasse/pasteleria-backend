@@ -22,8 +22,8 @@ const app = express();
 app.use(helmet());
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'],
-    credentials: true
+    origin: '*', // Permite todos los orígenes (usar solo en desarrollo/pruebas)
+    credentials: false // IMPORTANTE: con origin:'*' no se pueden usar credentials:true
   })
 );
 app.use(
